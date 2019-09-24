@@ -1,6 +1,7 @@
 const express = require('express');
 const signup = require('./signup.js');
 const signin = require('./signin.js');
+const profile = require('./profile.js');
 const router = express.Router();
 
 const indexRoute = router.get('/', (req, res, next) => {
@@ -10,7 +11,8 @@ const indexRoute = router.get('/', (req, res, next) => {
 routes = {
     signup,
     signin,
-    indexRoute
+    indexRoute,
+    profile
 };
 
 module.exports = routes;

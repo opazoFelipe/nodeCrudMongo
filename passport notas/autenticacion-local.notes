@@ -2,7 +2,7 @@
     Estrategia de autenticacion local para registro de usuarios
 ------------------------------------------------------------------
 
-Pasos:
+Archivo: src/passport/local-auth.js
 		
 	[js]
 
@@ -29,7 +29,7 @@ Pasos:
 				}, async (req, email, password, done) => {
 					const user = new User();    // ==> crea un nuevo documento tipo user
 					user.email = email;		    // ==> establece en el documento el email que envia el cliente
-					user.password = password;   // ==> establece en el documento el password que envia el cliente
+					user.password = user.encryptPassword(password);  // ==> cifra y guarda la password del cliente
 					await user.save();          /* ==> guarda el documento user en la coleccion users de la bd 
 													 (en el modelo de user esta especificado donde guardara mongodb este 
 													  documento)  */
@@ -53,5 +53,61 @@ Pasos:
 			password ==> tiene el password de usuario (viene desde el form)
 			req ==> Contiene campos adicionales a los anteriores (vienen desde el form)  
 			callback ==> llamado done () el cual sirve para devolver una respuesta al cliente cuando la autenticacion ha terminado.
+
+-----------------------------------------------------------
+    Ejemplo de autenticacion local usada en proyecto
+-----------------------------------------------------------
+[js]
+	
+	// importar passport
+	const passport = require('passport');
+	// importar passport-local, es un modulo aparte de passport que debe ser instalado
+	const LocalStrategy = require('passport-local').Strategy;
+
+	// importar un modelo User hecho en mongoose
+	const User = require('../models/user');
+
+	/* crear metodo para pasar el id del usuario logeado entre las paginas que visita de la aplicacion,
+	es importante, pues asi cada pagina que cambie el usuario tendra disponible el id para deserializarlo */
+	passport.serializeUser((user, done) => {
+	    done(null, user.id);
+	});
+
+	// crear metodo para comprobar que el usuario siga logeado mientras cambia de paginas de la aplicacion
+	passport.deserializeUser(async (id, done) => {
+	    const user = await User.findById(id);
+	    done(null, user);
+	});
+
+	// crear una estrategia de autenticacion con passport
+	passport.use('local-signup', new LocalStrategy({
+		/* campos que seran recibidos atraves del formulario de registro, el valor son 
+		los nombres de los campos en el formulario */
+	    usernameField: 'email',
+	    passwordField: 'password',
+	    // permite recibir otros campos adicionales ademas del username y password
+	    passReqToCallback: true
+	}, async (req, email, password, done) => {    // metodo que se ejecutara automaticamente al autenticar el usuario con passport
+
+		// comprobar que el email ingresado no existe en la base de datos
+	    const userEmail = User.findOne({email: email});
+	    if(userEmail) {
+
+	    	// el email ya existe, no registrar el usuario
+	        return done(null, false, req.flash('signupMessage', 'El email ingresado ya existe'));
+	    } else {
+
+	    	// el email no existe, entonces registrar el usuario
+	        const user = new User();
+	        user.email = email;
+	        user.password = user.encryptPassword(password);
+	        await user.save();
+	        done(null, user);
+	    }
+	}));
+  
+
+[\js]]
+
 
 	

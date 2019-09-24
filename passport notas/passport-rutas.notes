@@ -1,0 +1,36 @@
+-----------------------------------------------------------
+    		LLamar localStrategy desde una ruta
+-----------------------------------------------------------
+Archivo: src/routes/signup.js
+
+[js]
+
+	// Requerir express para usar su metodo Router()
+	const express = require('express');
+	const router = express.Router();
+
+	// requerir passport para usar su metodo de autenticacion
+	const passport = require('passport');
+
+	// LLamar la autenticacion local desde una ruta post
+	router.post('/signup', passport.authenticate('local-signup'. {
+		successRedirect: '/',
+		failureRedirect: '/signup',
+		passReqToCallback: true
+	}));
+
+
+[\js]]
+
+	- El metodo passport.authenticate() recibe como parametros:
+
+		- el nombre de la autenticacion local creada y que esta escrita en el archivo de passport externo.
+		- Un objeto de configuracion con los parametros 
+
+			successRedirect, que indica donde redireccionar signup si todo sale bien.
+			failureRedirect, que indica donde redireccionar si algo sale mal.
+			passReqToCallback, que permite a la ruta obtener campos adicionales al username y password 
+			en el registro si se le da como valor true.
+
+		- El metodo passport.authenticate() ejecutara todo lo que se especifico en la autenticacion local de forma
+		  automatica.

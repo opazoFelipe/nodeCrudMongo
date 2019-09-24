@@ -3,6 +3,7 @@ const engine = require('ejs-mate');
 const morgan = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const path = require('path');
 const routes = require('./routes/index');
@@ -22,14 +23,26 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(morgan('dev'));
 // Permite al servidor recibir datos desde el cliente (formularios...), pero con extended: false impide recibir otro tipo de datos 
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+    secret: 'mysecretsession',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+//middleware propio
+app.use((req, res, next) => {
+    app.locals.signupMessage = req.flash('signupMessage');
+    next();
+});
 
 // routes
 app.use(routes.indexRoute);
 app.use(routes.signin);
 app.use(routes.signup);
+app.use(routes.profile);
 
 // global variables
 
@@ -38,4 +51,4 @@ app.listen(app.get('port'), () => {
     console.log('server on port', app.get('port'));
 });
 
-// Minuto del video 01:10:00
+// Minuto del video 01:32:25

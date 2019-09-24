@@ -1,0 +1,48 @@
+-----------------------------------------------------------
+   			 Enviar mensajes entre paginas
+-----------------------------------------------------------
+
+[js]
+		
+	// Requerir express-session, passport y connect-flash en el index.js inicial del src
+	const session = require('express-session');
+	const flash = require('connect-flash');
+	const passport = require('passport');
+
+	// Userlo como middleware en la app
+	app.use(session({
+		// configuracion standar de session de express, existen mas en la documentacion
+		secret: 'mysecretsession' 	// este valor puede ser el que uno quiera
+		resave: false,
+		saveUnitialized: false
+	}));
+	app.use(flash());
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+[\js]]	
+
+	- El modulo connect-flash se utiliza en conjunto con el modulo passport.
+	- connect-flash debe ser usado como middleware antes que los modulos de passport.
+	- connect-flash y passport deben ser usados como middlewares despues que el modulo session (express-session) 
+	  pues ambos modulos usan las sesiones.
+	- Al declarar connect-flash en el index de la app, entonces ahora se puede acceder desde cualquier otro
+	  archivo de la app a connect-flash atraves de req.flash().
+
+[js]
+	
+	/* crear un middleware propio en el index de la app para poder hacer disponible los mensajes flash
+	en todas partes de la app */ 
+
+	app.use((req, res, next) => {
+
+		app.locals.signupMessage = req.flash('updateMessage');    // nombre cualquiera que se le dara a un mensaje
+
+		next();
+	});
+
+[\js]]
+
+   - app.locals.signupMessage , indica que es una variable local que sera accedida desde cualquier parte de la app.
+   - signupMessage es el nombre para esa variable que contiene el mensaje flash.
+   - next() sirve para que luego de este middleware siga con el proceso de recibir las URI las rutas
