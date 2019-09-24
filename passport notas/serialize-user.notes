@@ -1,0 +1,39 @@
+-----------------------------------------------------------
+    Serializacion y deserializacion de usuarios
+-----------------------------------------------------------
+
+- Es parte de la autenticacion de usuarios
+
+- Passport permite guardar la sesion de un usuario en la memoria del navegador
+  para continuar las sesiones al cambiar de paginas.
+
+  Ejemplo: archivo src/passport/local-auth.js
+
+  [js]
+  	
+  	// Requerir el modulo passport
+  	const passport = require('passport');
+  	// Requerir el modelo user de mongoose
+  	const User = require('../models/user');
+
+  	// usar metodo serializeUser
+  	passport.serializeUser((user, done) => {
+  		done(null, user.id); 	
+  	});
+
+  	// usar metodo deserializeUser
+  	passport.deserializeUser(async (id, done) => {
+  		const user = await User.findById(id);
+  		done(null, user);
+  	});
+
+  [\js]]
+
+  - serializeUser() es un metodo que sirve para intercambiar el id del usuario logeado entre 
+    las paginas que va visitando el usuario, lo cual es necesario para que deserializeUser()
+    tengo disponible el id del usuario.
+
+  - deserializeUser() es un metodo asincrono que usa el id del usuario logeado para consultar en 
+    la base de datos si existe cada vez que el usuario cambia de pagina, si existe le permite seguir
+    en la nueva pagina y le da los datos del usuario al servidor.
+

@@ -1,6 +1,8 @@
 const express = require('express');
 const engine = require('ejs-mate');
 const morgan = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
 
 const path = require('path');
 const routes = require('./routes/index');
@@ -8,6 +10,7 @@ const routes = require('./routes/index');
 // Initializations
 const app = express();
 require('./database');
+require('./passport/local-auth');
 
 // settings
 app.set('port', process.env.PORT || 3000);
@@ -19,6 +22,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(morgan('dev'));
 // Permite al servidor recibir datos desde el cliente (formularios...), pero con extended: false impide recibir otro tipo de datos 
 app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // routes
@@ -33,4 +38,4 @@ app.listen(app.get('port'), () => {
     console.log('server on port', app.get('port'));
 });
 
-// Minuto del video 01:06:45
+// Minuto del video 01:10:00
