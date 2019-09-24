@@ -1,0 +1,75 @@
+
+
+-----------------------------------------------------------
+   					 	Colecciones
+-----------------------------------------------------------
+
+Mostrar colecciones de la base de datos:
+	
+		show collections
+
+
+Eliminar colecciones de la base de datos:
+
+		db.nombre_coleccion.drop()
+
+
+-----------------------------------------------------------
+   					 	Documentos
+-----------------------------------------------------------
+
+
+Mostrar de forma entendible todos los documentos que existen en una coleccion:
+    
+		db.nombre_coleccion.find().pretty()
+
+
+Mostar un documento en una coleccion por un valor:
+    
+        db.nombre_coleccion.find({ "nombre_atributo": "valor" })
+
+
+Mostrar un documento en una coleccion por varios valores:
+    
+        db.nombre_coleccion.find({ "nombre_atributo_1": "valor",....., "nombre_atributo_n": "valor" })
+
+
+Mostrar atributos especificos de un documento y ademas con una condicion:
+
+		db.nombre_coleccion.find(
+			
+			{ "nombre_atributo_condicion": "valor", ....},  ==> json 1
+			{ "nombre_atributo_mostrar": "valor", ... }	   ==> json 2
+
+		)
+
+	    el primero json indicara los atributos que se usaran para filtrar los documentos y
+	    el segundo json indicara los atributos (columnas en sql) que se desean mostrar en pantalla del documento.
+
+Mostrar documentos ordenados por atributos especificados:
+		
+		db.nombre_coleccion.find({ "atributos" }).sort({ "nombre_atributo": "valor" })
+
+
+Mostrar cantidad especifica de documentos:
+
+		db.nombre_coleccion.find().limit( cantidad )
+
+
+Contar y mostrar los documentos de una coleccion:
+		
+		db.nombre_coleccion.count()
+
+
+Mostrar strings concatenados con valores de documentos usando forEach:
+
+		ejemplo: usando una coleccion llamada productos
+
+			db.productos.find().forEach(
+					
+					producto => print("Nombre del Producto: " + producto.nombre
+				))
+
+		La funcion print imprime en consola el string que se le da como argumento, es igual que la funcion "console.log()"
+
+

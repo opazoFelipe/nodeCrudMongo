@@ -1,0 +1,67 @@
+-----------------------------------------------------------
+   		 Crear modelos usando Schema de mongoose
+-----------------------------------------------------------
+
+[js]
+	
+	// Modelo de usuarios
+	Pasos:	Primero crear un nuevo directorio en src para almacenar los archivos modelos
+
+	1)  Archivo: models/user.js	
+		
+		// Crear un archivo externo llamado users.js:
+		// Requerir el modulo de mongoose y su propiedad Schema
+		// Requerir el modulo de becrypt para cifrar las password antes de guardarlas en la bd
+	
+		const mongoose = require('mongoose');
+		const { Schema } = mongoose;
+		const becrypt = require('bcrypt-nodejs');
+	
+
+		// Crear un nuevo Schema para los documentos pertenecientes a la coleccion de usuarios
+		
+		const userSchema = new Schema({
+			email: String,
+			password: String
+		});
+
+		- email => en la base de datos los usuarios tienen un email de tipo string
+		- password => en la base de datos los usuarios tienen un password de tipo string
+		
+
+		// Crear un metodo de cifrado de constraseñas con bcrypt para este schema
+
+		userSchema.methods.encryptPassword = (password) => {
+			return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+		};
+
+		
+		- el metodo de encriptacion recibe como parametro la password que encriptara.
+
+		- el metodo hashSync de bcrypt cifra el password en base a un algoritmo el cual a mas veces
+		- ejecutado hace mas robusto el cifrado.
+
+		- para especificar cuantas veces se debe ejecutar el algoritmo de cifrado, se usa el metodo
+		- de bcrypt .genSaltSync(10), que dice ejecutar 10 veces el algoritmo (es la cantidad standar que se usa pero 
+		- puede ser mas alta lo cual lo hace mas lento, o se mas baja lo cual lo hace mas rapido y menos robusto)
+		
+
+		/* Crear un metodo para comparar las password ingresadas por los usuarios cuando se logean 
+		   con la password encriptada correspondiente registrada en la base de datos.
+		*/
+
+		userSchema.methods.comparePassword = (password) => {
+			return bcrypt.compareSync(password, this.password);
+		};
+
+		- el metodo compareSync compara la password del usuario cuando se logea con la password registrada en la base de 
+		  datos devolviendo true si son iguales o false si no son iguales.
+
+		// Pasarle el Schema al metodo .model() de mongoose y exportarlo
+
+		module.exports = mongoose.model('users', userSchema);
+
+		- 'users' => el nombre que mongodb le dara a una coleccion que creara
+		-  userSchema => el schema de como deben lucir los documentos que se almacenaran en la coleccion 'users'
+
+[\js]

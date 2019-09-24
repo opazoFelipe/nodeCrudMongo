@@ -1,0 +1,50 @@
+-----------------------------------------------------------
+    Crear un archivo de conexion a mongoDB
+-----------------------------------------------------------
+
+[js]
+	
+	Pasos:
+
+	1)  Archivo: src/keys.js	
+		// Crear un archivo externo llamado keys.js como este:
+
+		module.exports = {
+		    mongodb: {
+		        URI: 'mongodb://localhost:27017/node-login-passport-local'
+		    }
+		};
+
+		/*  localhost:27017 => direccion de la instalacion de mongodb
+			node-login-passport-local => nombre de la base de datos, si no existe mongodb la creara automaticamente 
+		*/
+
+	2)  Archivo: src/database.js
+		/* 
+			Crear un archivo llamado database.js e importar el modulo de mongoose y
+			la propiedad mongodb del objeto keys.js creado 
+		*/
+
+		const mongoose = require('mongoose');
+		const { mongodb } = require('./keys');
+
+		// Crear la conexion
+
+		mongoose.connect(mongodb.URI, {})
+			.then(db => console.log('Database is conected'))
+			.catch(err => console.log(err));
+
+
+		/*
+			.then() => callback que se usara para recibir datos cuando se haga la conexion a la bd
+			.catch() => callback que muestra un error si este ocurre
+		*/
+	
+	3) Archivo: src/index.js
+		
+		// Requerir el archivo de conexion de base de datos en la app
+
+		require('./database');
+
+[\js]
+

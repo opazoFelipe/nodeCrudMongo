@@ -1,0 +1,39 @@
+-----------------------------------------------------------
+   Comandos para MongoDb en consola
+-----------------------------------------------------------
+
+/* 
+		Documentos: objetos Json que contienen los datos
+		Colecciones: conjunto de documentos que son del mismo tipo
+*/
+*****************************************************************************************************************
+
+Iniciar el servidor de MongoDb manualmente:
+
+		mongod
+
+Conectarse a un servidor activo de MongoDb manualmente:
+
+		mongo
+
+		!!Require de una segunda consola, puesto que en la que se ha iniciado el servidor se esta ejecutando este mismo
+
+Crear una nueva base de datos (esta no existira fisicamente hasta que se le inserte al menos 1 coleccion):
+
+		use nombre_db
+
+
+Mostrar bases de datos que se esta usando actualmente:
+    
+		db
+
+Mostrar todas las bases de datos existentes:
+    
+		show dbs
+
+
+Mostrar comandos disponibles:
+    
+		db.help()
+
+

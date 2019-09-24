@@ -1,0 +1,57 @@
+------------------------------------------------------------------
+    Estrategia de autenticacion local para registro de usuarios
+------------------------------------------------------------------
+
+Pasos:
+		
+	[js]
+
+		// Requerir los modulos de passport necesarios
+
+		const passport = require('passport');
+		const LocalStrategy = require('passport-local').Strategy; =>Sirve para crear la estrategia de autenticacion local
+
+		// Requerir un modelo de usuarios en este caso hecho con mongoose en algun archivo externo
+
+		const User = require('../models/user');
+
+		// Crear una funcion que hara las validaciones de los datos
+
+		passport.use (
+			'local-signup', 
+			new LocalStrategy (
+				{	
+					usernameField: 'email',
+					passwordField: 'password',
+					passReqToCallback: true    	/* ==> Permite recibir otros campos aparte del username y passowrd a 
+												   traves de un req */
+
+				}, async (req, email, password, done) => {
+					const user = new User();    // ==> crea un nuevo documento tipo user
+					user.email = email;		    // ==> establece en el documento el email que envia el cliente
+					user.password = password;   // ==> establece en el documento el password que envia el cliente
+					await user.save();          /* ==> guarda el documento user en la coleccion users de la bd 
+													 (en el modelo de user esta especificado donde guardara mongodb este 
+													  documento)  */
+					done(null, user); 			/* ==> null indica no errores, porque en la autenticacion no hay restricciones y
+													   user indica que se retorna el usuario registrado. */
+				}
+			)
+		)
+
+	[\js]]
+
+		- Esta funcion recibe como parametros el nombre de la estrategia que le dare ('local-signup') y el objeto LocalStrategy.
+		- A su vez, la instanciacion del objeto LocalStrategy recive como parametros un objeto de configuracion y un callback.
+
+		- El objeto de configuracion es una lista de campos que se recibiran de parte del cliente, los cuales se identifican por "name"
+		  en el caso de los formularios.
+
+		- El callback recibe 4 parametros, los cuales son:
+
+			username ==> tiene el nombre de usuario (viene desde el form)
+			password ==> tiene el password de usuario (viene desde el form)
+			req ==> Contiene campos adicionales a los anteriores (vienen desde el form)  
+			callback ==> llamado done () el cual sirve para devolver una respuesta al cliente cuando la autenticacion ha terminado.
+
+	

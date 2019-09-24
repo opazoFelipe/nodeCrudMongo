@@ -1,0 +1,14 @@
+
+
+-----------------------------------------------------------
+   					 	Documentos
+-----------------------------------------------------------
+
+Insertar un documento en una coleccion:
+    
+		db.nombre_coleccion.insert({ "nombre_dato_1": "valor_dato_1",......, "nombre_dato_n": "valor_dato_n" })
+
+
+Insertar una lista de documentos en una coleccion:
+
+		db.nombre_coleccion.insert([{ documento_1 }, { documento_2 }, { documento_3 }, ......, { documento_n }])
