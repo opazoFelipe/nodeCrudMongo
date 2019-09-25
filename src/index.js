@@ -35,6 +35,7 @@ app.use(passport.session());
 //middleware propio
 app.use((req, res, next) => {
     app.locals.signupMessage = req.flash('signupMessage');
+    app.locals.signinMessage = req.flash('signinMessage');
     next();
 });
 
@@ -51,4 +52,4 @@ app.listen(app.get('port'), () => {
     console.log('server on port', app.get('port'));
 });
 
-// Minuto del video 01:32:25
+// Minuto del video 01:50:00

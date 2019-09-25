@@ -16,3 +16,10 @@ Eliminar un documento de una coleccion:
 
 				{ "nombre": "teclado" }	==> json 1: busca los productos cuyo nombre sea "teclado" y eliminalos de la coleccion
 		)
+
+
+Eliminar una coleccion:
+
+		db.productos.drop()
+
+		

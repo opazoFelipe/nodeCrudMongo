@@ -55,7 +55,7 @@ Archivo: src/passport/local-auth.js
 			callback ==> llamado done () el cual sirve para devolver una respuesta al cliente cuando la autenticacion ha terminado.
 
 -----------------------------------------------------------
-    Ejemplo de autenticacion local usada en proyecto
+    Ejemplo de autenticacionde login local usada en proyecto
 -----------------------------------------------------------
 [js]
 	

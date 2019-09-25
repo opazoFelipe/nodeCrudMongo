@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 router.get('/signin', (req, res, next)=>{
-    res.send('This is the get route of signin');
+    res.render('signin');
 });
 
-router.post('/signin', (req, res, next)=>{
-
-});
+router.post('/signin', passport.authenticate('local-signin', {
+    successRedirect: '/profile',
+    failureRedirect: '/signin',
+    passReqToCallback: true
+}));
 
 module.exports = router;
